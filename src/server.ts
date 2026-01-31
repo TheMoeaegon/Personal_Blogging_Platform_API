@@ -1,6 +1,6 @@
 import app from "./app.js";
 
-process.loadEnvFile(".env.local");
+process.loadEnvFile(".env");
 
 const PORT = process.env.PORT;
 
