@@ -9,12 +9,16 @@ export const shorthands = undefined;
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
-  pgm.sql(`
-            CREATE TABLE users (
+    pgm.sql(`
+            CREATE TABLE authors (
                 id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                fullname TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE,
                 password_hash TEXT NOT NULL,
-                created_at  TIMESTAMP DEFAULT now()
+                bio TEXT NOT NULL DEFAULT '',
+                avatar_url TEXT,
+                created_at  TIMESTAMP DEFAULT now(),
+                updated_at TIMESTAMP DEFAULT now()
             );
         `);
 };
@@ -25,5 +29,5 @@ export const up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
-  pgm.sql(` DROP TABLE users; `);
+    pgm.sql(` DROP TABLE users; `);
 };

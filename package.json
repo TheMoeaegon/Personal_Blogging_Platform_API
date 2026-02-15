@@ -1,29 +1,31 @@
 {
-  "name": "personal_blogging_platform_api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "npx tsx watch --env-file=.env src/server.ts",
-    "migrate": "node-pg-migrate",
-    "migrate:up": "dotenv node-pg-migrate up",
-    "migrate:down": "dotenv node-pg-migrate down",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "express": "^5.2.1",
-    "pg": "^8.18.0"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.0.10",
-    "@types/pg": "^8.16.0",
-    "node-pg-migrate": "^8.0.4",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  }
+    "name": "personal_blogging_platform_api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "npx tsx watch --env-file=.env src/server.ts",
+        "migrate": "node-pg-migrate",
+        "migrate:up": "dotenv node-pg-migrate up",
+        "migrate:create": "node-pg-migrate create",
+        "migrate:down": "dotenv node-pg-migrate down",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "dependencies": {
+        "express": "^5.2.1",
+        "pg": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.6",
+        "@types/node": "^25.0.10",
+        "@types/pg": "^8.16.0",
+        "dotenv-cli": "^11.0.n0",
+        "node-pg-migrate": "^8.0.4",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3"
+    }
 }
