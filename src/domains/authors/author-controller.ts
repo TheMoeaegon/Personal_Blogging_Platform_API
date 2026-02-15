@@ -7,8 +7,8 @@ export const createAuthorController = async (
     res: Response,
     next: NextFunction,
 ) => {
-    const { fullname, email, password, bio, avatar_url } = req.body;
     try {
+        const { fullname, email, password, bio, avatar_url } = req.body;
         await createAuthorService({
             fullname,
             email,
@@ -16,6 +16,7 @@ export const createAuthorController = async (
             bio,
             avatar_url,
         });
+        res.status(201).json({ message: "Author created successfully" });
     } catch (error: any) {
         next(error);
     }
