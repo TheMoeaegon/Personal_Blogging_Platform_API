@@ -9,14 +9,17 @@ export const createAuthorController = async (
 ) => {
     try {
         const { fullname, email, password, bio, avatar_url } = req.body;
-        await createAuthorService({
+        const author = await createAuthorService({
             fullname,
             email,
             password,
             bio,
             avatar_url,
         });
-        res.status(201).json({ message: "Author created successfully" });
+        res.status(201).json({
+            message: "Author created successfully",
+            author,
+        });
     } catch (error: any) {
         next(error);
     }

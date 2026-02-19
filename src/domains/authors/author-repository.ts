@@ -1,5 +1,5 @@
 import { pool } from "../../shared/db/pool.js";
-import type { Author } from "./author-types.js";
+import type { Author, CreateAuthorInput } from "./author-types.js";
 
 export const createAuthor = async ({
     fullname,
@@ -7,10 +7,19 @@ export const createAuthor = async ({
     password_hash,
     bio = "",
     avatar_url = "",
-}: Author) => {
+}: CreateAuthorInput): Promise<Author | null> => {
     const query = `INSERT INTO authors (fullname, email, password_hash, bio, avatar_url) VALUES ($1, $2, $3, $4, $5)
-        RETURNING fullname, email, password_hash, bio, avatar_url;`;
+        RETURNING *;`;
     const values = [fullname, email, password_hash, bio, avatar_url];
-    const result = await pool.query(query, values);
-    console.log(result);
+    const result = await pool.query<Author>(query, values);
+    return result.rows[0] ?? null;
+};
+
+export const getAuthorByEmail = async (
+    email: string,
+): Promise<Author | null> => {
+    const query = `SELECT * FROM authors WHERE email = $1`;
+    const value = [email];
+    const result = await pool.query<Author>(query, value);
+    return result.rows[0] ?? null;
 };

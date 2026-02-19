@@ -1,8 +1,15 @@
 import bcrypt from "bcryptjs";
+import { DatabaseError } from "pg";
 
-import { createAuthor } from "./author-repository.js";
-import type { Author, AuthorDto } from "./author-types.js";
-import { ConflictError, ValidationError } from "../../shared/errors/index.js";
+import { createAuthor, getAuthorByEmail } from "./author-repository.js";
+import {
+    ConflictError,
+    ValidationError,
+    NotFoundError,
+    NotAuthenticateError,
+} from "../../shared/errors/index.js";
+
+import type { AuthorLoginDto, RegisterAuthorDto } from "./author-types.js";
 
 export const createAuthorService = async ({
     fullname,
@@ -10,7 +17,7 @@ export const createAuthorService = async ({
     password,
     bio = "",
     avatar_url = "",
-}: AuthorDto) => {
+}: RegisterAuthorDto) => {
     try {
         if (
             fullname === undefined ||
@@ -23,7 +30,7 @@ export const createAuthorService = async ({
             );
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const author: Author = {
+        const author = {
             fullname,
             email,
             password_hash: hashedPassword,
@@ -31,10 +38,41 @@ export const createAuthorService = async ({
             avatar_url,
         };
         return await createAuthor(author);
-    } catch (error: any) {
-        if (error?.code === "23505") {
-            throw new ConflictError("Email already exists", 409);
+    } catch (error: unknown) {
+        if (error instanceof DatabaseError) {
+            if (error?.code === "23505") {
+                throw new ConflictError("Email already exists", 409);
+            } else if (error?.code === "23502") {
+                throw new ValidationError(
+                    "Bad Request: Field cannot be empty",
+                    400,
+                );
+            } else {
+                throw new Error("Internal Server Error");
+            }
         }
         throw error;
+    }
+};
+
+export const LoginAuthorService = async ({
+    email,
+    password,
+}: AuthorLoginDto) => {
+    try {
+        if (!email || !password)
+            throw new ValidationError(
+                "Bad Request: Required field cannot be empty",
+                400,
+            );
+        const author = await getAuthorByEmail(email);
+        if (!author)
+            throw new NotFoundError("Author with this email doesn't exit");
+        const isMatch = await bcrypt.compare(password, author.password_hash);
+        if (!isMatch)
+            throw new NotAuthenticateError("email or password is invalid", 401);
+        return { message: "Login Successfully" };
+    } catch (err: unknown) {
+        throw err;
     }
 };

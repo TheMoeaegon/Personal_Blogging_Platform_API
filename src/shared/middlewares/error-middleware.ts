@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 
-import { ConflictError, ValidationError } from "../errors/index.js";
+import { AppError } from "../errors/index.js";
 
 export const errorMiddleware = (
     err: unknown,
@@ -10,10 +10,7 @@ export const errorMiddleware = (
 ) => {
     let statusCode: number;
     let message: string;
-    if (err instanceof ValidationError) {
-        statusCode = err.statusCode;
-        message = err.message;
-    } else if (err instanceof ConflictError) {
+    if (err instanceof AppError) {
         statusCode = err.statusCode;
         message = err.message;
     } else if (err instanceof TypeError) {
@@ -23,5 +20,5 @@ export const errorMiddleware = (
         statusCode = 500;
         message = "Internal Server Error";
     }
-    return res.status(statusCode).json({ message });
+    return res.status(statusCode).json({ error: message });
 };
