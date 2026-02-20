@@ -1,17 +1,17 @@
 import bcrypt from "bcryptjs";
 import { DatabaseError } from "pg";
 
-import { createAuthor, getAuthorByEmail } from "./author-repository.js";
 import {
     ConflictError,
     ValidationError,
     NotFoundError,
     NotAuthenticateError,
 } from "../../shared/errors/index.js";
+import { createAuthor, getAuthorByEmail } from "../../domains/authors/index.js";
 
-import type { AuthorLoginDto, RegisterAuthorDto } from "./author-types.js";
+import type { AuthorLoginDto, RegisterAuthorDto } from "./index.js";
 
-export const createAuthorService = async ({
+export const registerNewAuthorService = async ({
     fullname,
     email,
     password,
@@ -55,7 +55,7 @@ export const createAuthorService = async ({
     }
 };
 
-export const LoginAuthorService = async ({
+export const loginAuthorService = async ({
     email,
     password,
 }: AuthorLoginDto) => {

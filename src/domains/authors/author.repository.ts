@@ -1,5 +1,7 @@
 import { pool } from "../../shared/db/pool.js";
-import type { Author, CreateAuthorInput } from "./author-types.js";
+
+import type { Author } from "../../shared/types/index.js";
+import type { CreateAuthorInput } from "./index.js";
 
 export const createAuthor = async ({
     fullname,

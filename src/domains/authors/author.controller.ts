@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-
-import { createAuthorService } from "./author-service.js";
+import { registerNewAuthorService } from "../../applications/auth/index.js";
 
 export const createAuthorController = async (
     req: Request,
@@ -9,7 +8,7 @@ export const createAuthorController = async (
 ) => {
     try {
         const { fullname, email, password, bio, avatar_url } = req.body;
-        const author = await createAuthorService({
+        const author = await registerNewAuthorService({
             fullname,
             email,
             password,

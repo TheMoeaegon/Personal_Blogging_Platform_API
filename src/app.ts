@@ -1,7 +1,7 @@
 import express from "express";
 
-import authorRouter from "./domains/authors/author-routes.js";
 import { errorMiddleware } from "./shared/middlewares/index.js";
+import authorRouter from "./domains/authors/index.js";
 
 const app = express();
 
