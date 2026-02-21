@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { registerNewAuthorService } from "../../applications/auth/index.js";
+import { registerNewAuthorService } from "../auth/index.js";
 
 export const createAuthorController = async (
     req: Request,

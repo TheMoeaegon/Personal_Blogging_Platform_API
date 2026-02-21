@@ -7,9 +7,14 @@ import {
     NotFoundError,
     NotAuthenticateError,
 } from "../../shared/errors/index.js";
-import { createAuthor, getAuthorByEmail } from "../../domains/authors/index.js";
 
-import type { AuthorLoginDto, RegisterAuthorDto } from "./index.js";
+import {
+    createAccessJwtToken,
+    type AuthorLoginDto,
+    type ClaimsType,
+    type RegisterAuthorDto,
+} from "./index.js";
+import { createAuthor, getAuthorByEmail } from "../authors/index.js";
 
 export const registerNewAuthorService = async ({
     fullname,
@@ -71,7 +76,14 @@ export const loginAuthorService = async ({
         const isMatch = await bcrypt.compare(password, author.password_hash);
         if (!isMatch)
             throw new NotAuthenticateError("email or password is invalid", 401);
-        return { message: "Login Successfully" };
+
+        const secretKey = process.env.JWT_SECRET_KEY ?? "";
+        const claims: ClaimsType = {
+            sub: author.id,
+            iss: "Themoeaegon",
+        };
+        const accessToken = createAccessJwtToken(secretKey, claims);
+        return accessToken;
     } catch (err: unknown) {
         throw err;
     }
