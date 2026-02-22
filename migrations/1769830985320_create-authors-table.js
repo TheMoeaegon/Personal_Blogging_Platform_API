@@ -29,5 +29,5 @@ export const up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
-    pgm.sql(` DROP TABLE users; `);
+    pgm.sql(` DROP TABLE authors; `);
 };

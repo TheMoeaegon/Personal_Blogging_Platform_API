@@ -76,7 +76,6 @@ export const loginAuthorService = async ({
         const isMatch = await bcrypt.compare(password, author.password_hash);
         if (!isMatch)
             throw new NotAuthenticateError("email or password is invalid", 401);
-
         const secretKey = process.env.JWT_SECRET_KEY ?? "";
         const claims: ClaimsType = {
             sub: author.id,
