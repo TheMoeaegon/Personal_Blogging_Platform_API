@@ -16,6 +16,7 @@ import {
 import { saveRefreshToken } from "./auth.repository.js";
 import type {
     AuthorLoginDto,
+    AuthorResponseDto,
     ClaimsType,
     RegisterAuthorDto,
 } from "./auth.types.js";
@@ -27,7 +28,7 @@ export const registerNewAuthorService = async ({
     password,
     bio = "",
     avatar_url = "",
-}: RegisterAuthorDto) => {
+}: RegisterAuthorDto): Promise<AuthorResponseDto | null> => {
     try {
         if (
             fullname === undefined ||
@@ -47,7 +48,12 @@ export const registerNewAuthorService = async ({
             bio,
             avatar_url,
         };
-        return await createAuthor(author);
+        const authorDto = await createAuthor(author);
+        if (!authorDto)
+            throw Error(
+                "null return when trying creating to create new author",
+            );
+        return authorDto;
     } catch (error: unknown) {
         if (error instanceof DatabaseError) {
             if (error?.code === "23505") {

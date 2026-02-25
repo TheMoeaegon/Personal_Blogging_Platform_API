@@ -1,6 +1,7 @@
 import { pool } from "../../shared/db/pool.js";
 
 import type { Author } from "../../shared/types/index.js";
+import type { AuthorResponseDto } from "../auth/auth.types.js";
 import type { CreateAuthorInput } from "./index.js";
 
 export const createAuthor = async ({
@@ -9,9 +10,9 @@ export const createAuthor = async ({
     password_hash,
     bio = "",
     avatar_url = "",
-}: CreateAuthorInput): Promise<Author | null> => {
+}: CreateAuthorInput): Promise<AuthorResponseDto | null> => {
     const query = `INSERT INTO authors (fullname, email, password_hash, bio, avatar_url) VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;`;
+        RETURNING id, fullname, email, bio, avatar_url, created_at, updated_at;`;
     const values = [fullname, email, password_hash, bio, avatar_url];
     const result = await pool.query<Author>(query, values);
     return result.rows[0] ?? null;
