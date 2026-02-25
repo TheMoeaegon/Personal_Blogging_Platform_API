@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import crypto from "node:crypto";
 import { DatabaseError } from "pg";
 
 import {
@@ -9,11 +10,15 @@ import {
 } from "../../shared/errors/index.js";
 
 import {
-    createAccessJwtToken,
-    type AuthorLoginDto,
-    type ClaimsType,
-    type RegisterAuthorDto,
-} from "./index.js";
+    handleCreateAccessJwtToken,
+    handleCreateRefreshJwtToken,
+} from "./auth.utils.js";
+import { saveRefreshToken } from "./auth.repository.js";
+import type {
+    AuthorLoginDto,
+    ClaimsType,
+    RegisterAuthorDto,
+} from "./auth.types.js";
 import { createAuthor, getAuthorByEmail } from "../authors/index.js";
 
 export const registerNewAuthorService = async ({
@@ -81,8 +86,15 @@ export const loginAuthorService = async ({
             sub: author.id,
             iss: "Themoeaegon",
         };
-        const accessToken = createAccessJwtToken(secretKey, claims);
-        return accessToken;
+        const accessToken = handleCreateAccessJwtToken(secretKey, claims);
+        const refreshToken = handleCreateRefreshJwtToken(secretKey, claims);
+        const hashedToken = crypto
+            .createHash("sha256")
+            .update(refreshToken)
+            .digest("hex");
+        const expiredAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        await saveRefreshToken(hashedToken, author.id, expiredAt);
+        return { accessToken, refreshToken };
     } catch (err: unknown) {
         throw err;
     }

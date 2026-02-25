@@ -9,7 +9,7 @@
         "migrate:up": "dotenv node-pg-migrate up",
         "migrate:create": "node-pg-migrate create",
         "migrate:down": "dotenv node-pg-migrate down",
-        "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+        "test": "vitest"
     },
     "keywords": [],
     "author": "",
@@ -23,15 +23,13 @@
     },
     "devDependencies": {
         "@types/express": "^5.0.6",
-        "@types/jest": "^30.0.0",
         "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^25.0.10",
         "@types/pg": "^8.16.0",
         "dotenv-cli": "^11.0.n0",
-        "jest": "^30.2.0",
         "node-pg-migrate": "^8.0.4",
-        "ts-jest": "^29.4.6",
         "tsx": "^4.21.0",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "vitest": "^4.0.18"
     }
 }

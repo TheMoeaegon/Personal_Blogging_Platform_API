@@ -1,4 +1,4 @@
-import { createAccessJwtToken } from "../../domains/auth/auth.utils.js";
+import { handleCreateAccessJwtToken } from "../../domains/auth/index.js";
 import type { ClaimsType } from "../../domains/auth/index.js";
 
 describe("create access token", () => {
@@ -8,17 +8,19 @@ describe("create access token", () => {
     };
     const secretkey = "12345";
     it("should return a string token", () => {
-        const token = createAccessJwtToken(secretkey, claims);
+        const token = handleCreateAccessJwtToken(secretkey, claims);
         console.log("Generate Token: ", token);
         expect(typeof token).toBe("string");
         expect(token.length).toBeGreaterThan(10);
     });
 
     it("should throw an error if called with no secret key", () => {
-        expect(() => createAccessJwtToken("", claims)).toThrow();
+        expect(() => handleCreateAccessJwtToken("", claims)).toThrow();
     });
 
     it("should throw an error if called with no claims", () => {
-        expect(() => createAccessJwtToken(secretkey)).toThrow();
+        expect(() =>
+            handleCreateAccessJwtToken(secretkey, null as any),
+        ).toThrow();
     });
 });
