@@ -2,12 +2,14 @@ import express from "express";
 
 import { errorMiddleware } from "./shared/middlewares/index.js";
 import authorRouter from "./domains/authors/index.js";
+import authRouter from "./domains/auth/index.js";
 
 const app = express();
 
 app.use(express.json());
 
 app.use("/api/v1/authors", authorRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.use(errorMiddleware);
 
