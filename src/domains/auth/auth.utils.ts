@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-
 import type { ClaimsType } from './index.js';
 import { env } from '../../../env.js';
 
@@ -17,4 +16,8 @@ export const handleCreateRefreshJwtToken = (secretKey: string, claims: ClaimsTyp
   return refreshToken;
 };
 
-export const handleValidateAcessToken = () => {};
+export const handleVerifyToken = async (token: string) => {
+  const secretKey = env.JWT_SECRET;
+  const payload = jwt.verify(token, secretKey);
+  return payload as ClaimsType;
+};
