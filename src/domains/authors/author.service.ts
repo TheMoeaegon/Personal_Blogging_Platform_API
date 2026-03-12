@@ -4,7 +4,7 @@ import type { UpdateAuthorInput } from './author.types.js';
 
 export const updateAuthorService = async (updateAuthorDto: UpdateAuthorInput) => {
   try {
-    if (!updateAuthorDto.bio || !updateAuthorDto.id || !updateAuthorDto.fullname) {
+    if (!updateAuthorDto.bio || !updateAuthorDto.fullname) {
       throw new ValidationError('Required fields are missing', 400);
     }
     const updatedAuthor = await updateAuthor(updateAuthorDto);

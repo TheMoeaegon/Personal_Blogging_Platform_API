@@ -7,7 +7,8 @@ export async function updateAuthorControlller(req: AuthenticatedRequest, res: Re
   try {
     const id = req.user?.sub;
     const updateAuthorDto: UpdateAuthorInput = { ...req.body, id };
-    await updateAuthorService(updateAuthorDto);
+    const updatedAuthor = await updateAuthorService(updateAuthorDto);
+    return res.json({ message: 'Author Profile Updated', author: updatedAuthor });
   } catch (error: unknown) {
     next(error);
   }
